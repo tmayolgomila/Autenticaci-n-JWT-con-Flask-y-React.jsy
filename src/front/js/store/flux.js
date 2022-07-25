@@ -2,6 +2,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
+			auth:false,
+			token:"bienvenido", 
+			email:null,
+			username:null,
+
 			demo: [
 				{
 					title: "FIRST",
@@ -16,11 +21,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			]
 		},
 		actions: {
-			 setUsers : async (username,email, password) => {
-				const resp = await fetch(`https://3001-tmayolgomil-jwtconflask-1mt3mvq5b43.ws-eu54.gitpod.io/token`, { 
+			signup : async (username,email, password) => {
+				const resp = await fetch("https://3001-tmayolgomil-jwtconflask-1mt3mvq5b43.ws-eu54.gitpod.io/signup", { 
 					 method: "POST",
 					 headers: { "Content-Type": "application/json" },
-					 body: JSON.stringify({ "username": username,"email":email, "password": password }) 
+					 body: JSON.stringify({username, email, password }) 
 				})
 		   
 				if(!resp.ok) throw Error("There was a problem in the login request")
@@ -32,12 +37,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 					 throw ("Invalid email or password format")
 				}
 				const data = await resp.json()
-				// save your token in the localStorage
-			   //also you should set your user into the store using the setStore function
-				localStorage.setItem("jwt-token", data.token);
-		   
+				setStore({email:email})
+				setStore({username:username})
+				setStore({password:password})
+
+				localStorage.setItem("jwt-token", username);
+				setStore({token:username})
 				return data
 		   },
+
+		   login : async (username,email, password) => {
+			const resp = await fetch("https://3001-tmayolgomil-jwtconflask-1mt3mvq5b43.ws-eu54.gitpod.io/login", { 
+				 method: "POST",
+				 headers: { "Content-Type": "application/json" },
+				 body: JSON.stringify({ "username": username,"email":email, "password": password }) 
+			})
+	   
+			if(!resp.ok) throw Error("There was a problem in the login request")
+	   
+			if(resp.status === 401){
+				 throw("Invalid credentials")
+			}
+			else if(resp.status === 400){
+				 throw ("Invalid email or password format")
+			}
+			const data = await resp.json()
+			setStore({email:email, username:username, password:password})
+			setStore({auth:true})
+			localStorage.setItem("jwt-token", username);
+			setStore({token:username})
+			return data
+	   },
+	   
+	   		logout : () => {
+				localStorage.removeItem("token")
+				setStore({auth:false})
+				setStore({username:null})
+				setStore({email:null})
+			},
+
+
+
 		
 
 			getMessage: async () => {
