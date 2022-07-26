@@ -63,6 +63,28 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0 # avoid cache memory
     return response
 
+@app.route("/signup", methods = ["POST"])
+def signup():
+    body = request.get_json()
+    comprobando = User.query.filter_by(email = body["email"]).first()
+    if comprobando != None:
+        return "el usuario ya existe"
+    user = User(username = body["username"],email = body["email"], password = body["password"])
+    db.session.add(user)
+    db.session.commit()
+    token=create_access_token(identity=user.id)
+    return jsonify(token)
+
+@app.route("/login", methods = ["POST"])
+def signup():
+    body = request.get_json()
+    email= body["email"]
+    password=body["password"]
+    comprobando = User.query.filter_by(email = body["email"]).first()
+    if comprobando == None:
+       raise APIException('Usuario no encontrado')
+    token=create_access_token(identity=user.id)
+    return jsonify(token)
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

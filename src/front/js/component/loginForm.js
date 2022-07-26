@@ -13,15 +13,15 @@ function LoginForm() {
   
   return (
     <form>
-  <div className="mb-3" controlId="formBasicEmail">
+  <div className="mb-3">
     <label>Email address</label>
     <input onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="Enter email" />
   </div>
-  <div className="mb-3" controlId="formBasicPassword">
+  <div className="mb-3">
         <label>Password</label>
         <input onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" />
       </div>
-  <Button variant="primary" type="submit" onClick={()=>{
+  <button variant="primary" type="submit" onClick={()=>{
     if(email === "" || password === ""){
       alert("campos vacios, rellenar")
     }else{
@@ -29,7 +29,7 @@ function LoginForm() {
     };
   }}>
     Submit
-  </Button>
+  </button>
 </form>
   );
 }

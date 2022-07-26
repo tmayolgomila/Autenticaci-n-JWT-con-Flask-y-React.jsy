@@ -22,7 +22,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			signup : async (username,email, password) => {
-				const resp = await fetch("https://3001-tmayolgomil-jwtconflask-1mt3mvq5b43.ws-eu54.gitpod.io/signup", { 
+				const resp = await fetch(process.env.BACKEND_URL + "/signup", { 
 					 method: "POST",
 					 headers: { "Content-Type": "application/json" },
 					 body: JSON.stringify({username, email, password }) 
@@ -47,7 +47,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		   },
 
 		   login : async (username,email, password) => {
-			const resp = await fetch("https://3001-tmayolgomil-jwtconflask-1mt3mvq5b43.ws-eu54.gitpod.io/login", { 
+			const resp = await fetch(process.env.BACKEND_URL +  "/login", { 
 				 method: "POST",
 				 headers: { "Content-Type": "application/json" },
 				 body: JSON.stringify({ "username": username,"email":email, "password": password }) 
@@ -74,24 +74,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({auth:false})
 				setStore({username:null})
 				setStore({email:null})
-			},
+			}
 
 
 
 		
 
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
-				}
-			}
+			
 		}
 	};
 };

@@ -19,22 +19,22 @@ export const SignUp =()=> {
   return (
 
     <form>
-        <div className="mb-3" controlId="formBasicEmail">
+        <div className="mb-3">
         <label>Username</label>
         <input onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="Enter username" />
        
       </div>
-      <div className="mb-3" controlId="formBasicEmail">
+      <div className="mb-3">
         <label>Email address</label>
         <input onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="Enter email" />
        
       </div>
 
-      <div className="mb-3" controlId="formBasicPassword">
+      <div className="mb-3">
         <label>Password</label>
         <input onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" />
       </div>
-      <div className="mb-3" controlId="formBasicCheckbox">
+      <div className="mb-3">
       </div>
       <Button variant="primary" type="submit" onClick={()=>{
     if(email === "" || password === "" || username === ""){
