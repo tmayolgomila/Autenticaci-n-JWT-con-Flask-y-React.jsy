@@ -1,4 +1,4 @@
-
+import { useNavigate } from "react-router-dom";
 import React,{ useContext, useState } from 'react';
 import { Context } from "../store/appContext";
 
@@ -9,10 +9,10 @@ function LoginForm() {
   const{store, actions}= useContext(Context)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-
+  const navigate = useNavigate()
   
   return (
-    <form>
+    <>
   <div className="mb-3">
     <label>username</label>
     <input onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="Enter username" />
@@ -25,12 +25,12 @@ function LoginForm() {
     if(username === "" || password === ""){
       alert("campos vacios, rellenar")
     }else{
-      actions.signup(username,password)
+      actions.login(username,password, navigate)
     };
   }}>
     Submit
   </button>
-</form>
+</>
   );
 }
 
