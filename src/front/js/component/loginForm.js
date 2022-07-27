@@ -7,25 +7,25 @@ import { Context } from "../store/appContext";
 
 function LoginForm() {
   const{store, actions}= useContext(Context)
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   
   return (
     <form>
   <div className="mb-3">
-    <label>Email address</label>
-    <input onChange={(e)=>setEmail(e.target.value)} type="email" placeholder="Enter email" />
+    <label>username</label>
+    <input onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="Enter username" />
   </div>
   <div className="mb-3">
         <label>Password</label>
         <input onChange={(e)=>setPassword(e.target.value)} type="password" placeholder="Password" />
       </div>
   <button variant="primary" type="submit" onClick={()=>{
-    if(email === "" || password === ""){
+    if(username === "" || password === ""){
       alert("campos vacios, rellenar")
     }else{
-      actions.signup(email,password)
+      actions.signup(username,password)
     };
   }}>
     Submit

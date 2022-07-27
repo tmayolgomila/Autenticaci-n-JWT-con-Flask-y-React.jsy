@@ -18,7 +18,7 @@ export const SignUp =()=> {
   
   return (
 
-    <form>
+    <>
         <div className="mb-3">
         <label>Username</label>
         <input onChange={(e)=>setUsername(e.target.value)} type="text" placeholder="Enter username" />
@@ -40,13 +40,13 @@ export const SignUp =()=> {
     if(email === "" || password === "" || username === ""){
       alert("campos vacios, rellenar")
     }else{
-      actions.signup(email,password,username)
+      actions.signup(username,email, password)
       
     }
   }}>
         Submit
       </Button>
-    </form>
+    </>
   );
 }
 

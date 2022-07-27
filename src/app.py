@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -31,7 +31,7 @@ MIGRATE = Migrate(app, db, compare_type = True)
 db.init_app(app)
 
 # Allow CORS requests to this API
-CORS(app)
+CORS(app, origins=["https://3000-tmayolgomil-jwtconflask-ebkjuc62bsp.ws-eu54.gitpod.io"])
 
 # add the admin
 setup_admin(app)
@@ -64,7 +64,7 @@ def serve_any_other_file(path):
     return response
 
 @app.route("/signup", methods = ["POST"])
-def signup():
+def signup1():
     body = request.get_json()
     comprobando = User.query.filter_by(email = body["email"]).first()
     if comprobando != None:
@@ -76,7 +76,7 @@ def signup():
     return jsonify(token)
 
 @app.route("/login", methods = ["POST"])
-def signup():
+def signup2():
     body = request.get_json()
     email= body["email"]
     password=body["password"]
