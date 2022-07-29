@@ -28,7 +28,7 @@ function LoginForm() {
       actions.login(username,password, navigate)
     };
   }}>
-    Submit
+    Login
   </button>
 </>
   );

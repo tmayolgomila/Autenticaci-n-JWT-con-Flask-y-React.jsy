@@ -24,7 +24,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     },
     actions: {
       signup: async (username, email, password) => {
-		try{console.log(username, email, password);
+		try{
 			const resp = await fetch(process.env.BACKEND_URL + "/signup", {
 			  method: "POST",
 			  headers: { "Content-Type": "application/json" },
@@ -59,18 +59,15 @@ const getState = ({ getStore, getActions, setStore }) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, password }),
           });
-
-          if (!resp.ok) throw Error("There was a problem in the login request");
-
           if (resp.status === 401) {
             throw "Invalid credentials";
           } else if (resp.status === 400) {
-            throw "Invalid email or password format";
+            throw "Invalid username or password format";
           }
+          if (!resp.ok) throw Error("There was a problem in the login request");
           navigate("/private");
           const data = await resp.json();
           setStore({ username: username });
-          setStore({ password: password });
           setStore({ auth: true });
           localStorage.setItem("jwt-token", username);
           setStore({ token: username });

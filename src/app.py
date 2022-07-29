@@ -10,7 +10,6 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
 from api.models import db, User
-from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 
@@ -21,7 +20,7 @@ static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this "super secret" with something else!
+app.config["JWT_SECRET_KEY"] = "supersecreto"  # Change this "super secret" with something else!
 jwt = JWTManager(app)
 
 # database condiguration
@@ -36,7 +35,7 @@ MIGRATE = Migrate(app, db, compare_type = True)
 db.init_app(app)
 
 # Allow CORS requests to this API
-CORS(app, origins=["https://3000-tmayolgomil-jwtconflask-ebkjuc62bsp.ws-eu54.gitpod.io"])
+CORS(app, origins=["*"])
 
 # add the admin
 setup_admin(app)
@@ -45,7 +44,7 @@ setup_admin(app)
 setup_commands(app)
 
 # Add all endpoints form the API with a "api" prefix
-app.register_blueprint(api, url_prefix='/')
+
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
@@ -73,7 +72,7 @@ def signup():
     body = request.get_json()
     comprobando = User.query.filter_by(email = body["email"]).first()
     if comprobando != None:
-        return "el usuario ya existe"
+        return "el email ya existe"
     user = User(username = body["username"],email = body["email"], password = body["password"])
     db.session.add(user)
     db.session.commit()
@@ -91,10 +90,12 @@ def login():
        raise APIException('Usuario no encontrado')
     if psw == None:
        raise APIException('Contraseña incorrecta') 
+    if comprobando.password != psw.password:
+        raise APIException('Contraseña incorrecta') 
     token=create_access_token(identity=comprobando.id)
     return jsonify(token)
 
-@api.route("/private", methods=['GET'])
+@app.route("/private", methods=['GET'])
 @jwt_required()
 def private():
     # Accede a la identidad del usuario actual con get_jwt_identity
@@ -103,7 +104,7 @@ def private():
     
     return jsonify({"id": user.id, "username": user.username }), 200
 
-@api.route('/token', methods=['POST'])
+@app.route('/token', methods=['POST'])
 def create_token():
     username = request.json.get("username", None)
     email = request.json.get("email", None)
@@ -116,7 +117,8 @@ def create_token():
     access_token = create_access_token( identity=user.id)
     return jsonify({"token":access_token, "user_id":user.id}), 200
 
-# this only runs if `$ python src/main.py` is executed
+
+
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
